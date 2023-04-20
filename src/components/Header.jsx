@@ -24,6 +24,8 @@ const Header = () => {
                         <Link className='text-decoration-none text-white fs-5 pe-3' to='/booking' >Booking</Link>
                         <Link className='text-decoration-none text-white fs-5 pe-3' to='/order' >Order</Link>
                         <Link className='text-decoration-none text-white fs-5 pe-3' to='/' >{user && user.email}</Link>
+                        <Link className='text-decoration-none text-white fs-5 pe-3' to='/' >{user && user.displayName}</Link>
+                        <img src={user && user.photoURL} alt="" />
                     </Nav>
                     <Nav >
                         {

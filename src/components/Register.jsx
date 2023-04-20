@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
-import {sendEmailVerification} from 'firebase/auth'
+import {sendEmailVerification, updateProfile} from 'firebase/auth'
 
 
 const Register = () => {
@@ -10,6 +10,7 @@ const Register = () => {
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
     const [showPass, setShowPass] = useState(false)
+    const navigate = useNavigate()
 
     const handleRegister = (event) =>{
         event.preventDefault()
@@ -17,9 +18,10 @@ const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
         const confirm = form.confirm.value;
+        const name = form.name.value;
         setSuccess('')
         setError('')
-
+        // password one letter should be uppercase
         if(!/(?=.*?[A-Z])/.test(password)){
             setError('One Letter Should be Uppercase')
             return;
@@ -39,6 +41,8 @@ const Register = () => {
             setSuccess('successfully create account')
             setShowPass(false)
             handleVerification(loggedUser)
+            navigate('/login')
+            handleUpdateUser(loggedUser, name)
         })
         .catch(error =>{
             console.log(error);
@@ -55,12 +59,28 @@ const Register = () => {
             setError(error)
         })
     }
+    const handleUpdateUser = (user, name) =>{
+        updateProfile(user,{
+            displayName : name,
+            photoURL : 'https://i.ibb.co/XFmB35B/Frame-4.png'
+        })
+        .then(()=>{
+            console.log("user name okay");
+        })
+        .catch(error =>{
+            console.log(error);
+        })
+    }
 
 
     return (
         <div>
             <Form onSubmit={handleRegister} className='w-25 border rounded p-3 mx-auto mt-4'>
             <h3>Please Register</h3>
+                <Form.Group className="mb-3" controlId="formGroupName">
+                    <Form.Label>Your Name</Form.Label>
+                    <Form.Control type="text" name='name' placeholder="Enter name" required />
+                </Form.Group>
                 <Form.Group className="mb-3" controlId="formGroupEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" name='email' placeholder="Enter email" required />
