@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
 import {sendEmailVerification, updateProfile} from 'firebase/auth'
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const Register = () => {
@@ -39,21 +40,23 @@ const Register = () => {
             const loggedUser = result.user;
             form.reset()
             setSuccess('successfully create account')
+            toast('successfully create account')
             setShowPass(false)
             handleVerification(loggedUser)
-            navigate('/login')
+            // navigate('/login')
             handleUpdateUser(loggedUser, name)
         })
         .catch(error =>{
             console.log(error);
             setError(error.message)
+            toast(error.message)
         })
     }
 
     const handleVerification = (loggedUser) =>{
         sendEmailVerification(loggedUser)
         .then(result =>{
-            alert('please verify your email')
+            toast('please verify your email!!')
         })
         .catch(error => {
             setError(error)
@@ -98,6 +101,7 @@ const Register = () => {
                 <input className='btn btn-primary' variant="primary" type='submit' value={'Register'} />
                 <p className='text-danger mt-3'>{error}</p>
                 <p className='text-success mt-3'>{success}</p>
+                <ToastContainer />
             </Form>
         </div>
     );

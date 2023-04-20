@@ -10,6 +10,7 @@ import Register from './components/Register';
 import AuthProvider from './providers/AuthProvider';
 import Private from './PrivateRoutes/Private';
 import Order from './components/Order';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const router = createBrowserRouter([
